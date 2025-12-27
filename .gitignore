@@ -1,0 +1,26 @@
+# =========================
+# gti-ip-gate
+# =========================
+
+# ---- IP configuration (DO NOT COMMIT) ----
+admin/allow_ips_conf.cgi
+
+# ---- OS files ----
+.DS_Store
+Thumbs.db
+
+# ---- Editor / IDE ----
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ---- Logs ----
+*.log
+
+# ---- Temporary files ----
+tmp/
+temp/
+
+# ---- PHP (optional cache / vendor if added later) ----
+vendor/
