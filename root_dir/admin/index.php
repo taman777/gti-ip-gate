@@ -9,12 +9,27 @@ if (!file_exists($conf)) {
 $allowed = array_filter(array_map('trim', file($conf)));
 $ip = $_SERVER['REMOTE_ADDR'] ?? '';
 
+// 1. IP チェック
 if (!ip_allowed($ip, $allowed)) {
     http_response_code(403);
     exit('Access denied');
 }
 
-require __DIR__ . '/admin.php';
+// 2. パス判定
+$request_uri = $_SERVER['REQUEST_URI'] ?? '';
+
+// 管理画面 (admin.php) へのアクセスかどうかを判定
+// 許可IPであっても、パスなし（/）などは「目的のファイルなし」として制限
+if (strpos($request_uri, 'admin.php') !== false) {
+    require __DIR__ . '/admin.php';
+} else {
+    // パスなし、または他のファイルへのアクセス
+    // root_dir に実ファイルがない場合は禁止とする
+    http_response_code(403);
+    exit('Forbidden: No target file or directory.');
+}
+
+// --- Functions ---
 
 function ip_allowed(string $ip, array $rules): bool {
     foreach ($rules as $rule) {
@@ -31,6 +46,9 @@ function ip_allowed(string $ip, array $rules): bool {
 
 function ip_in_cidr(string $ip, string $cidr): bool {
     [$subnet, $mask] = explode('/', $cidr);
-    return (ip2long($ip) & ~((1 << (32 - $mask)) - 1))
-        === ip2long($subnet);
+    $ip_long = ip2long($ip);
+    $subnet_long = ip2long($subnet);
+    $mask_long = ~((1 << (32 - (int)$mask)) - 1);
+    
+    return ($ip_long & $mask_long) === ($subnet_long & $mask_long);
 }

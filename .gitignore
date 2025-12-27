@@ -2,8 +2,9 @@
 # gti-ip-gate
 # =========================
 
-# ---- IP configuration (DO NOT COMMIT) ----
-admin/allow_ips_conf.cgi
+# ---- IP & Admin configuration (DO NOT COMMIT) ----
+root_dir/admin/allow_ips_conf.cgi
+root_dir/admin/admin_conf.cgi
 
 # ---- OS files ----
 .DS_Store

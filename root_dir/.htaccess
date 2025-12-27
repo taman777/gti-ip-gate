@@ -1,21 +1,9 @@
-
----
-
-# ④ root_dir/.htaccess（サンプル）
-
-```apache
 RewriteEngine On
 
-# Block direct access to admin directory
-RewriteRule ^admin/ - [F]
+# 設定ファイル(.cgi)への直接アクセスを禁止
+RewriteRule \.cgi$ - [F]
 
-# Route all requests to admin/index.php
-RewriteRule ^.*$ admin/index.php [L]
-
-# ---- IP restriction ----
-<RequireAll>
-  Require all denied
-
-  # Example allowed IP
-  Require ip 203.0.113.10
-</RequireAll>
+# 全てのリクエストを admin/index.php に集约
+# (adminディレクトリへの直接アクセスも含む)
+RewriteCond %{REQUEST_URI} !^/admin/index.php
+RewriteRule ^(.*)$ admin/index.php [L,QSA]
