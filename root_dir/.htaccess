@@ -1,0 +1,21 @@
+
+---
+
+# ④ root_dir/.htaccess（サンプル）
+
+```apache
+RewriteEngine On
+
+# Block direct access to admin directory
+RewriteRule ^admin/ - [F]
+
+# Route all requests to admin/index.php
+RewriteRule ^.*$ admin/index.php [L]
+
+# ---- IP restriction ----
+<RequireAll>
+  Require all denied
+
+  # Example allowed IP
+  Require ip 203.0.113.10
+</RequireAll>
